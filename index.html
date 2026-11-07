@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <base href="/myexams-app/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="دورات وملخصات واختبارات — ماي اكزامس">
+  <meta name="theme-color" content="#F97316">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- iOS meta tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="My Exams">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- الملف الكبير يبلّش ينزل فوراً بدل ما يستنى ملف الإقلاع -->
+  <link rel="preload" href="main.dart.js" as="script">
+  <link rel="preload" href="assets/assets/image/new_icon.png" as="image">
+
+  <title>My Exams</title>
+
+  <style>
+    /* نفس خط التطبيق — نفس الملفات اللي بيحمّلها فلاتر، فما في تحميل زيادة */
+    @font-face {
+      font-family: "CairoBoot";
+      src: url("assets/assets/fonts/Cairo-ExtraBold.ttf") format("truetype");
+      font-weight: 800;
+      font-display: block;
+    }
+    @font-face {
+      font-family: "CairoBoot";
+      src: url("assets/assets/fonts/Cairo-SemiBold.ttf") format("truetype");
+      font-weight: 600;
+      font-display: block;
+    }
+
+    :root {
+      --bg: #FFFFFF;
+      --name: #12161C;
+      --tag: #6B7686;
+      --track: rgba(18, 22, 28, 0.07);
+      --glow: 0.10;
+      --brand: #FF7802;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0B0F14;
+        --name: #FFFFFF;
+        --tag: #97A1B2;
+        --track: rgba(255, 255, 255, 0.09);
+        --glow: 0.16;
+      }
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* ═══ شاشة التحميل: نسخة طبق الأصل عن شاشة البداية تبع التطبيق ═══ */
+    #boot {
+      position: fixed;
+      inset: 0;
+      z-index: 9;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .22s ease;
+      font-family: "CairoBoot", system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+    }
+    #boot.out { opacity: 0; pointer-events: none; }
+    #boot .glow {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--brand) 0%, rgba(255, 120, 2, 0) 70%);
+      opacity: var(--glow);
+    }
+    #boot .col {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #boot img {
+      width: 148px;
+      height: 148px;
+      object-fit: contain;
+      animation: bootIn .45s ease-out both;
+    }
+    #boot .name {
+      margin-top: 22px;
+      font-size: 33px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.4px;
+      color: var(--name);
+      direction: ltr;
+    }
+    #boot .tag {
+      margin-top: 9px;
+      font-size: 13.5px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.2px;
+      color: var(--tag);
+    }
+    #boot .bar {
+      position: absolute;
+      left: 50%;
+      bottom: 46px;
+      width: 104px;
+      height: 3px;
+      margin-left: -52px;
+      border-radius: 3px;
+      overflow: hidden;
+      background: var(--track);
+    }
+    #boot .bar::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 38px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, rgba(255, 120, 2, 0), var(--brand), rgba(255, 120, 2, 0));
+      animation: bootPulse 1.15s ease-in-out infinite;
+    }
+    #boot .slow {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 64px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--tag);
+      opacity: 0;
+      transition: opacity .4s ease;
+    }
+    #boot.is-slow .slow { opacity: 1; }
+    @keyframes bootPulse {
+      /* النبضة بتدخل من اليمين وبتطلع من اليسار (اتجاه عربي) */
+      from { left: 104px; }
+      to   { left: -38px; }
+    }
+    @keyframes bootIn {
+      from { opacity: 0; transform: scale(.86); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #boot img, #boot .bar::after { animation: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="boot" dir="rtl" role="status" aria-label="جاري التحميل">
+    <div class="glow"></div>
+    <div class="col">
+      <img src="assets/assets/image/new_icon.png" alt="">
+      <div class="name">My Exams</div>
+      <div class="tag">تعلّم · اختبر · تميّز</div>
+    </div>
+    <div class="slow" id="boot-slow">الاتصال بطيء شوي… لحظات وبيفتح</div>
+    <div class="bar"></div>
+  </div>
+
+  <script>
+    (function () {
+      var boot = document.getElementById("boot");
+      var pdfStarted = false;
+
+      // مكتبة قارئ الملفات بتنزل بعد ما يفتح الموقع، مو قبله
+      // (كانت تنافس ملفات التطبيق على النت وقت الفتح).
+      function loadPdfJs() {
+        if (pdfStarted) return;
+        pdfStarted = true;
+        var base = "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.6.82/build/";
+        var s = document.createElement("script");
+        s.type = "module";
+        s.textContent =
+          "import * as lib from '" + base + "pdf.min.mjs';" +
+          "var pdfjsLib = globalThis.pdfjsLib || lib; globalThis.pdfjsLib = pdfjsLib;" +
+          "pdfjsLib.GlobalWorkerOptions.workerSrc = '" + base + "pdf.worker.mjs';";
+        document.head.appendChild(s);
+      }
+
+      var slowTimer = setTimeout(function () {
+        if (boot) boot.classList.add("is-slow");
+      }, 7000);
+
+      window.addEventListener("flutter-first-frame", function () {
+        clearTimeout(slowTimer);
+        if (boot) {
+          boot.classList.add("out");
+          setTimeout(function () { boot && boot.remove(); boot = null; }, 260);
+        }
+        setTimeout(loadPdfJs, 300);
+      });
+
+      // احتياط: لو ما وصل حدث أول رسمة لأي سبب
+      setTimeout(loadPdfJs, 20000);
+    })();
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
