@@ -48615,7 +48615,7 @@ this.a=b},
 ana:function ana(){var _=this
 _.d=!1
 _.e="https://abdalrzakacs.github.io/myexams/MyExams.apk"
-_.f=""
+_.f="https://testflight.apple.com/join/3DTW5TAv"
 _.r=!1
 _.c=_.a=null},
 bja:function bja(a){this.a=a},
