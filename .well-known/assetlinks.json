@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mec.myexams",
+      "sha256_cert_fingerprints": [
+        "57:6B:8B:16:A6:BD:9D:17:07:97:B8:CB:16:B5:36:3F:C3:A1:37:1D:05:F3:74:60:89:5F:4A:CC:60:F1:CB:CA"
+      ]
+    }
+  }
+]
